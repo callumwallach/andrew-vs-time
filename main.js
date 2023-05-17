@@ -212,17 +212,15 @@ window.addEventListener("load", () => {
     if (!game.gameOver) animationRequest = requestAnimationFrame(animate);
   }
 
+  function startGame() {
+    game.startNewGame();
+  }
+
   function run() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     game.background.draw(ctx);
     game.loading.draw(ctx);
-    window.addEventListener(
-      "keydown",
-      (e) => {
-        game.startNewGame();
-      },
-      { once: true }
-    );
+    window.addEventListener("pointerdown", startGame, { once: true });
   }
   run();
 });
