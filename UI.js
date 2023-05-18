@@ -26,7 +26,7 @@ class UI {
       context.drawImage(this.livesImage, 25 * i + 20, 95, 25, 25);
     }
     // empowered
-    if (this.game.player.isEmpowered()) {
+    if (this.game.player.isEmpowered() && this.game.powerBar) {
       // context.font = `${this.fontSize * 0.8}px ${this.fontFamily}`;
       // context.fillText(
       //   `Power: ${(this.game.player.empoweredTimer * 0.001).toFixed(1)}`,

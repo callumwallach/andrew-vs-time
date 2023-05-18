@@ -27,6 +27,7 @@ window.addEventListener("load", () => {
   let bossMaxHealth = 250;
   let maxParticles = 50;
   let sound = true;
+  let powerBar = true;
   let debug = false;
   const fullScreenButton = document.getElementById("fullScreenButton");
 
@@ -170,6 +171,7 @@ window.addEventListener("load", () => {
       this.success = false;
       // possible url params
       this.debug = debug;
+      this.powerBar = powerBar;
       this.sound = sound;
       this.lives = maxLives;
       this.maxParticles = maxParticles;
@@ -235,6 +237,8 @@ window.addEventListener("load", () => {
     if (p) maxParticles = p;
     const s = urlParams.get("sound") === "off";
     if (s) sound = !s;
+    const b = urlParams.get("bar") === "off";
+    if (b) powerBar = !b;
     debug = urlParams.has("debug");
     if (debug) console.log(urlParams);
   }
