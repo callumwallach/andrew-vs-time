@@ -84,6 +84,7 @@ class InputHandler {
     window.addEventListener("touchstart", (e) => {
       this.touchX = e.changedTouches[0].pageX;
       this.touchY = e.changedTouches[0].pageY;
+      if (this.game.gameOver) this.game.startNewGame();
     });
     window.addEventListener("touchend", (e) => {
       this.keys.splice(this.keys.indexOf(MOVE_UP), 1);

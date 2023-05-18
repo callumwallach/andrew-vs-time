@@ -17,27 +17,24 @@ window.addEventListener("load", () => {
   const ctx = canvas.getContext("2d");
   canvas.width = 1200;
   canvas.height = 500;
-  const maxLives = 5;
+  let maxLives = 5;
   let newGame = true;
   let lastTime = 0;
   let animationRequest;
   const maxTime = 3 * 60 * 1000;
-  const enemyInterval = 2 * 1000;
-  const bossInterval = 1 * 60 * 1000;
-  const bossMaxHealth = 250;
+  let enemyInterval = 2 * 1000;
+  let bossInterval = 1 * 60 * 1000;
+  let bossMaxHealth = 250;
+  let maxParticles = 50;
+  let debug = false;
   const fullScreenButton = document.getElementById("fullScreenButton");
 
   class Game {
     constructor(width, height) {
-      this.debug = false;
       this.width = width;
       this.height = height;
       this.groundMargin = 40;
       this.isLoading = true;
-      this.maxParticles = 50;
-      this.enemyInterval = enemyInterval;
-      this.bossInterval = bossInterval;
-      this.bossMaxHealth = bossMaxHealth;
       this.fontColor = "black";
       this.maxTime = maxTime;
       this.init();
@@ -170,7 +167,14 @@ window.addEventListener("load", () => {
       this.time = 0;
       this.gameOver = false;
       this.success = false;
+      // possible url params
+      this.debug = debug;
       this.lives = maxLives;
+      this.maxParticles = maxParticles;
+      this.enemyInterval = enemyInterval;
+      this.bossInterval = bossInterval;
+      this.bossMaxHealth = bossMaxHealth;
+      // enter state
       this.player.currentState = this.player.states[0];
       this.player.currentState.enter();
     }
@@ -216,7 +220,23 @@ window.addEventListener("load", () => {
     game.startNewGame();
   }
 
+  function processURLParams(urlParams) {
+    const bi = parseInt(urlParams.get("bi"));
+    if (bi) bossInterval = bi;
+    const bh = parseInt(urlParams.get("bh"));
+    if (bh) bossMaxHealth = bh;
+    const ei = parseInt(urlParams.get("ei"));
+    if (ei) enemyInterval = ei;
+    const lives = parseInt(urlParams.get("lives"));
+    if (lives) maxLives = lives;
+    const p = parseInt(urlParams.get("p"));
+    if (p) maxParticles = p;
+    debug = urlParams.has("debug");
+    if (debug) console.log(urlParams);
+  }
+
   function run() {
+    processURLParams(new URLSearchParams(window.location.search));
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     game.background.draw(ctx);
     game.loading.draw(ctx);
