@@ -4,7 +4,7 @@ class UI {
     this.fontSize = 30;
     this.fontFamily = "Creepster";
     this.livesImage = document.getElementById("lives");
-    this.fireImage = document.getElementById("fireBar");
+    //this.fireImage = document.getElementById("fireBar");
   }
   update() {}
   draw(context) {
@@ -45,9 +45,13 @@ class UI {
       context.strokeRect(20, 135, barWidth, barHeight);
       context.fillStyle = "rgba(0, 0, 0, 0.5)";
       context.fillRect(20, 135, barWidth - 2, barHeight - 2);
-      const pattern = context.createPattern(this.fireImage, "repeat");
+      //const pattern = context.createPattern(this.fireImage, "repeat");
       //context.drawImage(this.fireImage, 20, 140, 200, 45);
-      context.fillStyle = pattern;
+      //context.fillStyle = "#FA824E"; //pattern;
+      //context.fillStyle = "rgba(218, 165, 32, 0.8)";
+      //context.fillStyle = "rgba(227, 119, 77, 0.83)";
+      context.fillStyle = "#F9EC31";
+      //context.fillStyle = "#F8CC2A";
       context.fillRect(
         20,
         135,

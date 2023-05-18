@@ -1,6 +1,7 @@
 // prettier-ignore
 import {
   states as PLAYER_STATES,
+  Standing,
   Sitting,
   Running,
   Jumping,
@@ -12,16 +13,24 @@ import {
   KnockedBack,
 } from "./playerStates.js";
 import { MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT } from "./constants.js";
-import appearance from "./assets/boy.js";
+import dog from "./assets/dog.js";
+import girl from "./assets/girl.js";
+import boy from "./assets/boy.js";
 
 const RECT = 0;
 const ELLIPSE = 1;
 const ROTATED_ELLIPSE = 2;
 
+const appearances = {
+  DOG: "dog",
+  BOY: "boy",
+  GIRL: "girl",
+};
+
 const hitBoxType = RECT;
 
 class Player {
-  constructor(game) {
+  constructor(game, character) {
     this.game = game;
     this.width = 0; //100;
     this.height = 0; //91.3;
@@ -30,7 +39,23 @@ class Player {
     this.vx = 0;
     this.vy = 0;
     this.weight = 1;
+    // console.log(girl.frames);
+    // const
     //this.image = player;
+    let appearance;
+    switch (character.toLowerCase()) {
+      case appearances.BOY:
+        appearance = boy;
+        break;
+      case appearances.GIRL:
+        appearance = girl;
+        break;
+      case appearances.DOG:
+      default:
+        appearance = dog;
+        break;
+    }
+    //console.log(character, appearance);
     this.image = document.getElementById(appearance.imageName);
     this.offsetY = null;
     this.frameX = 0;
@@ -44,6 +69,7 @@ class Player {
     this.speed = 0;
     this.maxSpeed = 10;
     this.states = [
+      new Standing(this.game, appearance),
       new Sitting(this.game, appearance),
       new Running(this.game, appearance),
       new Jumping(this.game, appearance),
@@ -188,6 +214,7 @@ class Player {
         powerUp.y < this.y + this.height &&
         powerUp.y + powerUp.height > this.y
       ) {
+        this.game.addPoints(25, powerUp.x, powerUp.y, 35);
         powerUp.markedForDeletion = true;
         this.setState(PLAYER_STATES.EMPOWERED, 2);
       }
@@ -320,4 +347,4 @@ class Player {
   }
 }
 
-export default Player;
+export { appearances, Player };

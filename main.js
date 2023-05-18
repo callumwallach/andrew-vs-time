@@ -1,6 +1,6 @@
 import UI from "./UI.js";
 import Loading from "./loading.js";
-import Player from "./player.js";
+import { appearances, Player } from "./player.js";
 import InputHandler from "./input.js";
 import Background from "./background.js";
 import { FlyingEnemy, GroundEnemy, ClimbingEnemy } from "./enemies.js";
@@ -26,6 +26,7 @@ window.addEventListener("load", () => {
   let bossInterval = 1 * 60 * 1000;
   let bossMaxHealth = 250;
   let maxParticles = 50;
+  let character = "dog";
   let sound = true;
   let powerBar = true;
   let debug = false;
@@ -149,9 +150,20 @@ window.addEventListener("load", () => {
       if (this.lives <= 0) this.gameOver = true;
     }
     init() {
+      // possible url params
+      this.debug = debug;
+      this.powerBar = powerBar;
+      this.sound = sound;
+      this.lives = maxLives;
+      this.maxParticles = maxParticles;
+      this.enemyInterval = enemyInterval;
+      this.bossInterval = bossInterval;
+      this.bossMaxHealth = bossMaxHealth;
+      this.character = character;
+      // local resets
       this.speed = 0;
       this.maxSpeed = 4;
-      this.player = new Player(this);
+      this.player = new Player(this, this.character);
       this.input = new InputHandler(this);
       this.background = new Background(this);
       this.UI = new UI(this);
@@ -169,15 +181,6 @@ window.addEventListener("load", () => {
       this.time = 0;
       this.gameOver = false;
       this.success = false;
-      // possible url params
-      this.debug = debug;
-      this.powerBar = powerBar;
-      this.sound = sound;
-      this.lives = maxLives;
-      this.maxParticles = maxParticles;
-      this.enemyInterval = enemyInterval;
-      this.bossInterval = bossInterval;
-      this.bossMaxHealth = bossMaxHealth;
       // enter state
       this.player.currentState = this.player.states[0];
       this.player.currentState.enter();
@@ -225,6 +228,8 @@ window.addEventListener("load", () => {
   }
 
   function processURLParams(urlParams) {
+    const a = urlParams.get("player");
+    if (a) character = a;
     const bi = parseInt(urlParams.get("bi"));
     if (bi) bossInterval = bi;
     const bh = parseInt(urlParams.get("bh"));
