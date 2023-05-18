@@ -26,6 +26,7 @@ window.addEventListener("load", () => {
   let bossInterval = 1 * 60 * 1000;
   let bossMaxHealth = 250;
   let maxParticles = 50;
+  let sound = true;
   let debug = false;
   const fullScreenButton = document.getElementById("fullScreenButton");
 
@@ -169,6 +170,7 @@ window.addEventListener("load", () => {
       this.success = false;
       // possible url params
       this.debug = debug;
+      this.sound = sound;
       this.lives = maxLives;
       this.maxParticles = maxParticles;
       this.enemyInterval = enemyInterval;
@@ -231,6 +233,8 @@ window.addEventListener("load", () => {
     if (lives) maxLives = lives;
     const p = parseInt(urlParams.get("p"));
     if (p) maxParticles = p;
+    const s = urlParams.get("sound") === "off";
+    if (s) sound = !s;
     debug = urlParams.has("debug");
     if (debug) console.log(urlParams);
   }
