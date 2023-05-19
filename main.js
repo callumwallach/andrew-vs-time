@@ -23,6 +23,8 @@ myFont.load().then((font) => {
 
 window.addEventListener("load", () => {
   const canvas = document.getElementById("canvas1");
+  canvas.style.display = "block";
+  document.getElementById("loading").style.display = "none";
   const ctx = canvas.getContext("2d");
   canvas.width = 1200;
   canvas.height = 500;
@@ -31,6 +33,7 @@ window.addEventListener("load", () => {
   let lastTime = 0;
   let animationRequest;
   const maxTime = 3 * 60 * 1000;
+  let fps = 20;
   let enemyInterval = 2 * 1000;
   let bossInterval = 1 * 60 * 1000;
   let bossMaxHealth = 250;
@@ -40,6 +43,10 @@ window.addEventListener("load", () => {
   let powerBar = true;
   let debug = false;
   const fullScreenButton = document.getElementById("fullScreenButton");
+  if (document.fullscreenEnabled) {
+    fullScreenButton.style.display = "block";
+    fullScreenButton.addEventListener("click", toggleFullScreen);
+  }
 
   class Game {
     constructor(width, height) {
@@ -169,6 +176,7 @@ window.addEventListener("load", () => {
       this.bossInterval = bossInterval;
       this.bossMaxHealth = bossMaxHealth;
       this.character = character;
+      this.fps = fps;
       // local resets
       this.speed = 0;
       this.maxSpeed = 4;
@@ -215,7 +223,6 @@ window.addEventListener("load", () => {
       document.exitFullscreen();
     }
   }
-  fullScreenButton.addEventListener("click", toggleFullScreen);
 
   const game = new Game(canvas.width, canvas.height);
 
@@ -239,6 +246,8 @@ window.addEventListener("load", () => {
   function processURLParams(urlParams) {
     const a = urlParams.get("player");
     if (a) character = a;
+    const f = parseInt(urlParams.get("fps"));
+    if (f) fps = f;
     const bi = parseInt(urlParams.get("bi"));
     if (bi) bossInterval = bi;
     const bh = parseInt(urlParams.get("bh"));

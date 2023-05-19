@@ -29,20 +29,6 @@ class Loading {
     );
     context.restore();
   }
-  fadeOut(text) {
-    var alpha = 1.0, // full opacity
-      interval = setInterval(function () {
-        canvas.width = canvas.width; // Clears the canvas
-        context.fillStyle = "rgba(255, 0, 0, " + alpha + ")";
-        context.font = "italic 20pt Arial";
-        context.fillText(text, 50, 50);
-        alpha = alpha - 0.05; // decrease opacity (fade out)
-        if (alpha < 0) {
-          canvas.width = canvas.width;
-          clearInterval(interval);
-        }
-      }, 50);
-  }
 }
 
 export default Loading;
