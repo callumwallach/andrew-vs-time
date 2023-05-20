@@ -95,43 +95,34 @@ class UI {
     // game over
     if (this.game.gameOver) {
       context.textAlign = "center";
-      context.font = `${this.fontSize * 2}px ${this.fontFamily}`;
+      const gw = this.game.width;
+      const gh = this.game.height;
+      context.fillStyle = "rgba(255,255,255,.1)";
+      context.fillRect(0, 0, gw, gh);
+      context.fillStyle = this.game.fontColor;
+      context.font = `${this.fontSize * 3}px ${this.fontFamily}`;
       //const heading = playerWon ? `Well done!` : `Love at first bite?`;
-      const heading = this.game.success
-        ? `Mid Life Crisis averted!`
-        : `Game Over!`;
-      context.fillText(
-        heading,
-        this.game.width * 0.5,
-        this.game.height * 0.5 - 20
-      );
+      const heading = this.game.success ? `Happy Birthday!!` : `Game Over!`;
+      context.fillText(heading, gw * 0.5, gh * 0.5 - 20);
 
       if (this.game.success) {
-        context.font = `${this.fontSize * 1}px ${this.fontFamily}`;
-        context.fillText(
-          `Happy Birthday!!`,
-          this.game.width * 0.5,
-          this.game.height * 0.5 + 20
-        );
+        context.font = `${this.fontSize * 1.2}px ${this.fontFamily}`;
+        context.fillText(`Mid Life Crisis averted!`, gw * 0.5, gh * 0.5 + 30);
         context.fillText(
           `Your new age is ${Math.max(
             21,
             50 - Math.floor(this.game.score / 100)
           )}!!`,
-          this.game.width * 0.5,
-          this.game.height * 0.5 + 60
+          gw * 0.5,
+          gh * 0.5 + 75
         );
       } else {
         // const message = playerWon
         //   ? `What are the creatures of the night afraid of? YOU!!!`
         //   : `Better luck next time!`;
-        const message = `You tried, but you're still 50...`;
-        context.font = `${this.fontSize * 1}px ${this.fontFamily}`;
-        context.fillText(
-          message,
-          this.game.width * 0.5,
-          this.game.height * 0.5 + 20
-        );
+        const message = `You tried, but you're still turning 50...`;
+        context.font = `${this.fontSize * 1.2}px ${this.fontFamily}`;
+        context.fillText(message, gw * 0.5, gh * 0.5 + 30);
       }
     }
     //context.restore();
