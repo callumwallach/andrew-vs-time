@@ -82,8 +82,52 @@ class InputHandler {
       }
     });
     window.addEventListener("touchstart", (e) => {
-      this.touchX = e.changedTouches[0].pageX;
-      this.touchY = e.changedTouches[0].pageY;
+      this.touchX = e.changedTouches[0].clientX;
+      this.touchY = e.changedTouches[0].clientY;
+      //console.log(e.changedTouches);
+      // const canvas = document.getElementById("canvas1");
+      // const context = canvas.getContext("2d");
+      // context.save();
+      // context.fillStyle = "white";
+      // context.fillRect(this.touchX, this.touchY, 10, 10);
+      // context.restore();
+      // var rect = canvas.getBoundingClientRect();
+      // console.log(
+      //   this.game.player.y,
+      //   this.touchY,
+      //   "+",
+      //   rect.top.toFixed(0) / 2,
+      //   "=",
+      //   (this.touchY + rect.top / 2).toFixed(0),
+      //   this.game.touchRollIcon.dy,
+      //   "=>",
+      //   this.game.touchRollIcon.dy + this.game.touchRollIcon.dHeight
+      // );
+      // this.touchY += rect.top / 2;
+      //this.touchY = e.targetTouches[0].pageY - rect.top;
+      // console.log(
+      //   rect.top,
+      //   this.touchX,
+      //   this.touchY,
+      //   this.game.touchRollIcon.dx,
+      //   "=>",
+      //   this.game.touchRollIcon.dx + this.game.touchRollIcon.dWidth,
+      //   this.game.touchRollIcon.dy,
+      //   "=>",
+      //   this.game.touchRollIcon.dy + this.game.touchRollIcon.dHeight,
+      //   "|",
+      //   this.game.height
+      // );
+      // if (
+      //   this.touchX > this.game.touchRollIcon.dx &&
+      //   this.touchX <
+      //     this.game.touchRollIcon.dx + this.game.touchRollIcon.dWidth &&
+      //   this.touchY > this.game.touchRollIcon.dy &&
+      //   this.touchY <
+      //     this.game.touchRollIcon.dy + this.game.touchRollIcon.dHeight
+      // ) {
+      //   if (!this.#contains(ENTER)) this.keys.push(ENTER);
+      // }
       if (this.game.gameOver) this.game.startNewGame();
     });
     window.addEventListener("touchend", (e) => {
@@ -98,9 +142,9 @@ class InputHandler {
 
       const action = this.#getAction(
         this.touchX,
-        e.changedTouches[0].pageX,
+        e.changedTouches[0].clientX,
         this.touchY,
-        e.changedTouches[0].pageY
+        e.changedTouches[0].clientY
       );
       if (action && !this.#contains(action)) this.keys.push(action);
     });
