@@ -1,8 +1,11 @@
+import settings from "./settings.js";
+
 class Loading {
   constructor(game) {
     this.game = game;
     this.fontSize = 40;
     this.fontFamily = "Creepster";
+    this.text = settings[this.game.recipient].loading;
   }
   update() {}
   draw(context) {
@@ -11,20 +14,16 @@ class Loading {
     context.save();
     context.fillStyle = "rgba(255,255,255,.15)";
     context.fillRect(0, 0, gw, gh);
-    context.shadowOffsetX = 4;
-    context.shadowOffsetY = 4;
+    context.shadowOffsetX = 2;
+    context.shadowOffsetY = 2;
     context.shadowColor = "white";
     context.shadowBlur = 0;
     context.fillStyle = this.game.fontColor;
     context.textAlign = "center";
-    context.font = `${this.fontSize * 2}px ${this.fontFamily}`;
-    const heading = `Andrew vs Father Time`;
-    const message1 = `As Andrew approaches his 50th the Grim Reaper offers a choice!!`;
-    const message2 = `Face him and triumph and he will turn back the clock!`;
-    context.fillText(heading, gw * 0.5, gh * 0.5 - 20);
-    context.font = `${this.fontSize * 0.75}px ${this.fontFamily}`;
-    context.fillText(message1, gw * 0.5, gh * 0.5 + 25);
-    context.fillText(message2, gw * 0.5, gh * 0.5 + 70);
+    this.text.forEach((line) => {
+      context.font = `${this.fontSize * line.fontSize}px ${this.fontFamily}`;
+      context.fillText(line.message, gw * 0.5, gh * 0.5 + line.position);
+    });
     context.restore();
   }
 }

@@ -1,6 +1,6 @@
 import UI from "./UI.js";
 import Loading from "./loading.js";
-import { appearances, Player } from "./player.js";
+import { Player } from "./player.js";
 import InputHandler from "./input.js";
 import Background from "./background.js";
 import { FlyingEnemy, GroundEnemy, ClimbingEnemy } from "./enemies.js";
@@ -11,10 +11,16 @@ import {
   CollisionAnimation,
   ExplosionAnimation,
 } from "./collisionAnimation.js";
-//import Controls from "./controls.js";
+import Controls from "./controls.js";
+import settings from "./settings.js";
 
 const MOUSE = "mouse";
 const TOUCH = "touch";
+
+const ANDREW = "andrew";
+const ANYA = "anya";
+
+const owner = ANDREW;
 
 let myFont = new FontFace(
   "Creepster",
@@ -26,6 +32,7 @@ myFont.load().then((font) => {
 });
 
 window.addEventListener("load", () => {
+  document.title = settings[owner].title;
   const canvas = document.getElementById("canvas1");
   canvas.style.display = "block";
   document.getElementById("loading").style.display = "none";
@@ -42,7 +49,6 @@ window.addEventListener("load", () => {
   let bossInterval = 1 * 60 * 1000;
   let bossMaxHealth = 250;
   let maxParticles = 50;
-  let character = appearances.BOY;
   let sound = true;
   let powerBar = true;
   let debug = false;
@@ -53,7 +59,10 @@ window.addEventListener("load", () => {
   }
 
   class Game {
-    constructor(width, height) {
+    constructor(recipient, width, height) {
+      this.version = 1.4;
+      console.log("version:", this.version);
+      this.recipient = recipient;
       this.pointer = MOUSE;
       this.width = width;
       this.height = height;
@@ -61,6 +70,8 @@ window.addEventListener("load", () => {
       this.isLoading = true;
       this.fontColor = "black";
       this.maxTime = maxTime;
+      this.fullScreen = false;
+      this.input = new InputHandler(this, canvas);
       this.init();
     }
     update(deltaTime) {
@@ -129,7 +140,7 @@ window.addEventListener("load", () => {
       this.projectiles.forEach((projectile) => projectile.draw(context));
       this.particles.forEach((particle) => particle.draw(context));
       this.collisions.forEach((collision) => collision.draw(context));
-      //if (this.pointer === TOUCH) this.controls.draw(context);
+      this.controls.draw(context);
       this.floatingMessages.forEach((message) => message.draw(context));
       this.UI.draw(context);
     }
@@ -181,15 +192,15 @@ window.addEventListener("load", () => {
       this.enemyInterval = enemyInterval;
       this.bossInterval = bossInterval;
       this.bossMaxHealth = bossMaxHealth;
-      this.character = character;
+      //console.log(settings[this.recipient]);
+      this.character = settings[this.recipient].character;
       this.fps = fps;
       // local resets
       this.speed = 0;
       this.maxSpeed = 4;
       this.player = new Player(this, this.character);
-      //this.touchRollIcon = this.player.getTouchRollIcon();
-      //this.controls = new Controls(this);
-      this.input = new InputHandler(this);
+      this.controls = new Controls(this, this.player.getTouchRollIcon());
+      this.input.init();
       this.background = new Background(this);
       this.UI = new UI(this);
       this.loading = new Loading(this);
@@ -224,19 +235,22 @@ window.addEventListener("load", () => {
     }
   }
 
+  const game = new Game(owner, canvas.width, canvas.height);
+
   function toggleFullScreen() {
     if (!document.fullscreenElement) {
       canvas
         .requestFullscreen()
+        .then(() => {
+          game.fullScreen = true;
+        })
         .catch((err) =>
-          alert(`Error, can't enable full screen mode: ${err.message}`)
+          alert(`Error, can't enable full screen ${err.message}`)
         );
     } else {
       document.exitFullscreen();
     }
   }
-
-  const game = new Game(canvas.width, canvas.height);
 
   function animate(timeStamp) {
     let deltaTime = timeStamp - lastTime;
@@ -288,6 +302,9 @@ window.addEventListener("load", () => {
       },
       { once: true }
     );
+    window.addEventListener("resize", function () {
+      console.log("window resize", canvas.width, canvas.height);
+    });
   }
   run();
 });

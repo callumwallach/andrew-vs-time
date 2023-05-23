@@ -17,15 +17,6 @@ const DIVING = "DIVING";
 const HIT = "HIT";
 
 const states = {
-  // SITTING: 0,
-  // RUNNING: 1,
-  // JUMPING: 2,
-  // FALLING: 3,
-  // ROLLING: 4,
-  // DIVING: 5,
-  // HIT: 6,
-  // EMPOWERED: 7,
-  // KNOCKED: 8,
   STANDING: 0,
   SITTING: 1,
   RUNNING: 2,
@@ -264,11 +255,12 @@ class Diving extends State {
       )
     );
     if (this.game.player.isOnGround()) {
-      if (this.game.pointer === "touch") {
-        this.game.player.setState(states.EMPOWERED, 2);
-      } else {
-        this.game.player.setState(states.RUNNING, 1);
-      }
+      //if (this.game.pointer === "touch") {
+      //  this.game.player.setState(states.EMPOWERED, 2);
+      //} else {
+      //  this.game.player.setState(states.RUNNING, 1);
+      //}
+      this.game.player.setState(states.RUNNING, 1);
       for (let i = 0; i < 30; i++) {
         this.game.particles.unshift(
           new Splash(

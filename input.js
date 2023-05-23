@@ -18,14 +18,13 @@ import {
   R,
 } from "./constants.js";
 
+const TOUCH = "touch";
+
 class InputHandler {
-  constructor(game) {
+  constructor(game, canvas) {
     this.game = game;
-    this.keys = [];
-    this.touchX = "";
-    this.touchY = "";
-    this.touchThresholdX = 30;
-    this.touchThresholdY = 30;
+    this.canvas = canvas;
+    this.init();
     window.addEventListener("keydown", (e) => {
       switch (e.key) {
         case ARROW_UP:
@@ -82,72 +81,41 @@ class InputHandler {
       }
     });
     window.addEventListener("touchstart", (e) => {
-      this.touchX = e.changedTouches[0].clientX;
-      this.touchY = e.changedTouches[0].clientY;
-      //console.log(e.changedTouches);
-      // const canvas = document.getElementById("canvas1");
-      // const context = canvas.getContext("2d");
-      // context.save();
-      // context.fillStyle = "white";
-      // context.fillRect(this.touchX, this.touchY, 10, 10);
-      // context.restore();
-      // var rect = canvas.getBoundingClientRect();
-      // console.log(
-      //   this.game.player.y,
-      //   this.touchY,
-      //   "+",
-      //   rect.top.toFixed(0) / 2,
-      //   "=",
-      //   (this.touchY + rect.top / 2).toFixed(0),
-      //   this.game.touchRollIcon.dy,
-      //   "=>",
-      //   this.game.touchRollIcon.dy + this.game.touchRollIcon.dHeight
-      // );
-      // this.touchY += rect.top / 2;
-      //this.touchY = e.targetTouches[0].pageY - rect.top;
-      // console.log(
-      //   rect.top,
-      //   this.touchX,
-      //   this.touchY,
-      //   this.game.touchRollIcon.dx,
-      //   "=>",
-      //   this.game.touchRollIcon.dx + this.game.touchRollIcon.dWidth,
-      //   this.game.touchRollIcon.dy,
-      //   "=>",
-      //   this.game.touchRollIcon.dy + this.game.touchRollIcon.dHeight,
-      //   "|",
-      //   this.game.height
-      // );
-      // if (
-      //   this.touchX > this.game.touchRollIcon.dx &&
-      //   this.touchX <
-      //     this.game.touchRollIcon.dx + this.game.touchRollIcon.dWidth &&
-      //   this.touchY > this.game.touchRollIcon.dy &&
-      //   this.touchY <
-      //     this.game.touchRollIcon.dy + this.game.touchRollIcon.dHeight
-      // ) {
-      //   if (!this.#contains(ENTER)) this.keys.push(ENTER);
-      // }
+      //console.log(e);
+      e.preventDefault();
+      this.touchX = e.changedTouches[0].pageX;
+      this.touchY = e.changedTouches[0].pageY;
+      const pos = getMousePos(this.canvas, e.changedTouches[0]);
+      if (this.game.controls.isClicked(pos.x, pos.y)) {
+        this.controlsClicked = !this.controlsClicked;
+      }
       if (this.game.gameOver) this.game.startNewGame();
     });
     window.addEventListener("touchend", (e) => {
-      this.keys.splice(this.keys.indexOf(MOVE_UP), 1);
-      this.keys.splice(this.keys.indexOf(MOVE_DOWN), 1);
-      this.keys.splice(this.keys.indexOf(MOVE_LEFT), 1);
-      this.keys.splice(this.keys.indexOf(MOVE_RIGHT), 1);
+      this.keys = [];
+      //console.log(this.controlsClicked ? "active" : "inactive");
+      if (this.controlsClicked)
+        if (!this.#contains(ENTER)) this.keys.push(ENTER);
     });
     window.addEventListener("touchmove", (e) => {
-      // const swipeDistanceX = e.changedTouches[0].pageX - this.touchX;
-      // const swipeDistanceY = e.changedTouches[0].pageY - this.touchY;
+      e.preventDefault();
 
       const action = this.#getAction(
         this.touchX,
-        e.changedTouches[0].clientX,
+        e.changedTouches[0].pageX,
         this.touchY,
-        e.changedTouches[0].clientY
+        e.changedTouches[0].pageY
       );
       if (action && !this.#contains(action)) this.keys.push(action);
     });
+  }
+  init() {
+    this.keys = [];
+    this.touchX = "";
+    this.touchY = "";
+    this.touchThresholdX = 30;
+    this.touchThresholdY = 30;
+    this.controlsClicked = false;
   }
   #getAction(startX, endX, startY, endY, thresholdX, thresholdY) {
     //console.log(startX, endX, startY, endY, thresholdX, thresholdY);
@@ -180,6 +148,14 @@ class InputHandler {
     }
     return false;
   }
+}
+
+function getMousePos(canvas, evt) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: ((evt.clientX - rect.left) / (rect.right - rect.left)) * canvas.width,
+    y: ((evt.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height,
+  };
 }
 
 export default InputHandler;

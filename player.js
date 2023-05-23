@@ -120,7 +120,6 @@ class Player {
     this.vy = this.isOnGround() ? 0 : this.vy + this.weight;
     // vertical boundaries
     this.y = Math.min(this.y, this.#getGround());
-    //console.log(this.y);
     // sprite animation
     if (this.frameTimer > this.frameInterval) {
       this.frameX = this.frameX < this.maxFrame ? this.frameX + 1 : 0;
@@ -173,17 +172,12 @@ class Player {
     );
   }
   getTouchRollIcon() {
-    const rollingState = new Rolling(this.game, this.appearance);
     return {
       image: this.image,
-      sx: 0,
-      sy: rollingState.getDimensions().offsetY,
-      sWidth: rollingState.getDimensions().width,
-      sHeight: rollingState.getDimensions().height,
-      dx: 16,
-      dy: this.game.height - 75,
-      dWidth: 65,
-      dHeight: 65,
+      x: 0,
+      y: this.states[PLAYER_STATES.ROLLING].getDimensions().offsetY,
+      width: this.states[PLAYER_STATES.ROLLING].getDimensions().width,
+      height: this.states[PLAYER_STATES.ROLLING].getDimensions().height,
     };
   }
   #getEllipseHitBox() {
