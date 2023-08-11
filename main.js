@@ -392,7 +392,9 @@ window.addEventListener("load", () => {
   }
 
   function run() {
-    gameMode();
+    //gameMode();
+    localStorage.setItem("success", "true");
+    mosaicMode();
   }
   run();
 });
